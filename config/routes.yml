@@ -1,0 +1,30 @@
+# Ekran modułu w panelu silnika.
+#
+# _legacy_controller wskazuje zakładkę silnika, bo ekran żyje w jego panelu —
+# dzięki temu nie zakładamy własnej zakładki tylko po to, żeby PrestaShop miał
+# gdzie sprawdzić uprawnienia.
+
+quince_feature_rank_settings:
+  path: quince/feature-rank
+  methods: [GET]
+  defaults:
+    _controller: Quince\FeatureRank\Controller\Admin\SettingsController::indexAction
+    _legacy_controller: 'AdminQuince'
+    _legacy_link: 'AdminQuince'
+
+quince_feature_rank_recompute:
+  path: quince/feature-rank/recompute
+  methods: [POST]
+  defaults:
+    _controller: Quince\FeatureRank\Controller\Admin\SettingsController::recomputeAction
+    _legacy_controller: 'AdminQuince'
+    _legacy_link: 'AdminQuince'
+
+quince_feature_rank_save:
+  path: quince/feature-rank/save
+  methods: [POST]
+  defaults:
+    _controller: Quince\FeatureRank\Controller\Admin\SettingsController::saveAction
+    _legacy_controller: 'AdminQuince'
+    _legacy_link: 'AdminQuince'
+

@@ -1,0 +1,26 @@
+services:
+  _defaults:
+    public: true
+
+    # Te trzy linie są obowiązkowe w każdym naszym module.
+    #
+    # PrestaShop wyszukuje kontrolery modułów wyrażeniem regularnym po treści pliku
+    # (`class X extends FrameworkBundleAdminController`) i dopiero wtedy dokłada im
+    # tagi, dzięki którym Symfony podaje kontrolerowi jego lokalizator usług.
+    # Nasze kontrolery dziedziczą po wspólnej klasie silnika, więc ten wzorzec
+    # nie pasuje — deklarujemy to sami zamiast liczyć na wykrycie.
+    autoconfigure: true
+    autowire: true
+    tags: ['controller.service_arguments']
+
+  Quince\FeatureRank\Controller\Admin\SettingsController:
+    class: Quince\FeatureRank\Controller\Admin\SettingsController
+    arguments:
+      - '@Quince\FeatureRank\Rank\Storage'
+      - '@Quince\FeatureRank\Settings\RankSettings'
+
+  Quince\FeatureRank\Rank\Storage:
+    class: Quince\FeatureRank\Rank\Storage
+
+  Quince\FeatureRank\Settings\RankSettings:
+    class: Quince\FeatureRank\Settings\RankSettings

@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="ModulesQuincefeaturerankAdmin" source-language="en-US" target-language="pl-PL" datatype="plaintext">
+    <body>
+      <trans-unit id="bbdff8b46fae1ba9811a82f31bf169ff">
+        <source>%count% different</source>
+        <target>różnych: %count%</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="04b35a8f6f0ec2b3ca5c77ab5b6560bd">
+        <source>%n%. place</source>
+        <target>%n%. miejsce</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="c0e497b7c8761a8da6a6c81357f3d862">
+        <source>A changed product marks its categories for recomputing, and the ranking is worked out again the first time someone opens a product from such a category. Leave this off while you are importing: the ranking then waits for you to press the button.</source>
+        <target>Zmieniony produkt zaznacza swoje kategorie do przeliczenia, a ranking powstaje na nowo przy pierwszym wejściu klienta na produkt z takiej kategorii. Na czas importu zostaw wyłączone: ranking poczeka wtedy na twoje kliknięcie.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="cd29482f255b07406a4cabd6bf1ad9ad">
+        <source>A feature filled in for fewer products than this is left out. On the rest of the cards it would be an empty row. Lower it while you are still filling the catalogue in.</source>
+        <target>Cecha wypełniona u mniejszej liczby produktów wypada z listy. Na pozostałych kartach byłaby pustym wierszem. Obniż próg, dopóki uzupełniasz katalog.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="4dfad3632a3ce48cd5d243bb0eb96a05">
+        <source>A feature that has the same value for every product in the category says nothing about this one. Turn this off if your shop wants it on the card anyway.</source>
+        <target>Cecha, która u wszystkich produktów w kategorii ma tę samą wartość, nic o tym produkcie nie mówi. Wyłącz, jeśli sklep i tak chce ją na karcie.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="d6061babd2c128c22bbe0b26d26d5d7b">
+        <source>After catalogue changes</source>
+        <target>Po zmianach w katalogu</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="39e61ac00229d6b518782f09b5ffc2f9">
+        <source>Always show</source>
+        <target>Pokazuj zawsze</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="b9431a07f95b167ff068ea6ae2b90129">
+        <source>Always shown</source>
+        <target>Pokazywana zawsze</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="131833e62a3a9cc4da6f5529d64d2c75">
+        <source>Category to inspect</source>
+        <target>Kategoria do sprawdzenia</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="21021ea0e52be8e9c599f4dff41e5be0">
+        <source>Feature</source>
+        <target>Cecha</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="b238f1e4afdb34cfe98331d6dd167bd4">
+        <source>Feature ranking</source>
+        <target>Ranking cech</target>
+        <note>quince_feature_rank.php</note>
+      </trans-unit>
+      <trans-unit id="833cf2e8a924a9af40c55fc8302bbe64">
+        <source>Features with one value</source>
+        <target>Cechy o jednej wartości</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="dd5118aae6958fc5cfaf47b7e5097eef">
+        <source>Filled in for at least (%)</source>
+        <target>Wypełniona u co najmniej (%)</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="d1100485f5707c6a8603256880ea36a1">
+        <source>Last computed: %when%.</source>
+        <target>Ostatnie przeliczenie: %when%.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="71b0b20effb2fb435f9c7afefebe1921">
+        <source>Leave out</source>
+        <target>Pomijaj</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="92b0dcd4e36b6b37ee300f231c812418">
+        <source>Leave them out</source>
+        <target>Pomijaj je</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="fc1b6112892396116bdadabf3380288d">
+        <source>Left out</source>
+        <target>Pomijana</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="715f88aec497555f97bacebbabba10f2">
+        <source>No features would be shown for this product.</source>
+        <target>Przy tym produkcie nie pokazałaby się żadna cecha.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="046f2a265111811b0f471757f92a117f">
+        <source>No products with features in this category.</source>
+        <target>W tej kategorii nie ma produktów z cechami.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="02122957e69d777590183b815bd955fb">
+        <source>Nothing computed yet. Use "Recompute all categories".</source>
+        <target>Nic jeszcze nie policzone. Użyj „Przelicz wszystkie kategorie”.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="832716f8b7047d7de4f6c4f4735a704d">
+        <source>On the product page</source>
+        <target>Na karcie produktu</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="9291c9d717163340aa1f3dacce329ba7">
+        <source>Picks the product features worth showing on the product page, based on how they are spread across the category being browsed.</source>
+        <target>Wybiera cechy produktu warte pokazania na karcie, na podstawie tego, jak rozkładają się w oglądanej kategorii.</target>
+        <note>quince_feature_rank.php</note>
+      </trans-unit>
+      <trans-unit id="068f80c7519d0528fb08e82137a72131">
+        <source>Products</source>
+        <target>Produkty</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="1cddcaa2e5ab2544da9adf4694de76ee">
+        <source>Quince Feature Rank</source>
+        <target>Quince ranking cech</target>
+        <note>quince_feature_rank.php</note>
+      </trans-unit>
+      <trans-unit id="df3fe393f216aa9bcdc3235947a6f1d9">
+        <source>Ranking recomputed for %count% categories.</source>
+        <target>Ranking przeliczony dla %count% kategorii.</target>
+        <note>src/Controller/Admin/SettingsController.php</note>
+      </trans-unit>
+      <trans-unit id="642d793a926df76dbb38d0f7d0df2d37">
+        <source>Recompute all categories</source>
+        <target>Przelicz wszystkie kategorie</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="3e97cd1759a34efb91042c6293432a64">
+        <source>Recompute on its own</source>
+        <target>Przeliczaj samoczynnie</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="c9cc8cce247e49bae79f15173ce97354">
+        <source>Save</source>
+        <target>Zapisz</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="bcbdf90f3da76214e7e828fb2d93efd2">
+        <source>Saved. Conditions changed, so the ranking was recomputed for %count% categories.</source>
+        <target>Zapisane. Warunki się zmieniły, więc ranking przeliczył się dla %count% kategorii.</target>
+        <note>src/Controller/Admin/SettingsController.php</note>
+      </trans-unit>
+      <trans-unit id="3428965006dfce0aa756315892a26c55">
+        <source>Saved. Ranking recomputed for this category.</source>
+        <target>Zapisane. Ranking tej kategorii przeliczony.</target>
+        <note>src/Controller/Admin/SettingsController.php</note>
+      </trans-unit>
+      <trans-unit id="fc6e6dad82ea2c91231422f41b1c70a2">
+        <source>Saves the conditions and the decisions from the table, then refreshes the ranking of the category you are looking at.</source>
+        <target>Zapisuje warunki i decyzje z tabeli, a potem odświeża ranking oglądanej kategorii.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="bd74c89270554697c647736b3382024d">
+        <source>This is what a customer sees</source>
+        <target>To zobaczy klient</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="76a6ab12f9fb444fb6a5fe1696f78bee">
+        <source>Two conditions checked in every category. Changing them recomputes the ranking for the whole shop.</source>
+        <target>Dwa warunki sprawdzane w każdej kategorii. Ich zmiana przelicza ranking w całym sklepie.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="c8b9b5d5c407ed636f9879f89ecabecc">
+        <source>Under the short description the product page shows a few features. Here you see which ones the shop picked for a category, and why it skipped the rest.</source>
+        <target>Pod krótkim opisem karta produktu pokazuje kilka cech. Tutaj widzisz, które sklep wybrał dla kategorii i dlaczego pominął resztę.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="eabcc4b77145a4a58a6a13c1a4330e37">
+        <source>Uninstalling removes the computed ranking. Key features will fall back to catalogue order.</source>
+        <target>Odinstalowanie kasuje policzony ranking. Kluczowe cechy wrócą do kolejności z katalogu.</target>
+        <note>quince_feature_rank.php</note>
+      </trans-unit>
+      <trans-unit id="cc85642f35c7cdffadd129a48dd40ab0">
+        <source>Values in this category</source>
+        <target>Wartości w tej kategorii</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="781d1551e9f4a28a02261ad68d675188">
+        <source>What is in the category</source>
+        <target>Co jest w kategorii</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="eda3cb52f5a3333038cdc36f2fe63add">
+        <source>When a feature makes the list</source>
+        <target>Kiedy cecha wchodzi na listę</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="f046dd6d217ca82d72759c6a8aafa37e">
+        <source>Why these and not others</source>
+        <target>Dlaczego te, a nie inne</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="99db5f1559d0718525c3cba06ccca79d">
+        <source>You have changes that are not saved. Recomputing does not save them, so they will be lost. Continue?</source>
+        <target>Masz niezapisane zmiany. Przeliczenie ich nie zapisuje, więc przepadną. Kontynuować?</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="d82a1813c0f1d3b244f3f40185f74a5b">
+        <source>Your decision</source>
+        <target>Twoja decyzja</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="f46bb4024eb0dd7a72574cefd92fdd88">
+        <source>no. Every product has the same value</source>
+        <target>nie. Każdy produkt ma tę samą wartość</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="5df73bc2cce2a5986cf83dc541266550">
+        <source>no. Filled in too rarely, most cards would show a blank row</source>
+        <target>nie. Wypełniona zbyt rzadko, na większości kart byłby pusty wiersz</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="3c31ae1bf06e0880006384f311b95ab4">
+        <source>no. Other features come first</source>
+        <target>nie. Inne cechy są wyżej</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="dd5ce27290acc66db6d595070f797b91">
+        <source>no. You left it out</source>
+        <target>nie. Pominięta przez ciebie</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

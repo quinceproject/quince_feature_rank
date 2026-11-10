@@ -1,0 +1,23 @@
+{
+    "name": "quinceproject/feature-rank",
+    "description": "Quince Feature Rank: picks the product features worth showing on the product page",
+    "type": "prestashop-module",
+    "license": "OSL-3.0",
+    "authors": [
+        {
+            "name": "Quince Project",
+            "email": "quinceproject@proton.me"
+        }
+    ],
+    "require": {
+        "php": ">=8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Quince\\FeatureRank\\": "src/"
+        }
+    },
+    "config": {
+        "prepend-autoloader": false
+    }
+}

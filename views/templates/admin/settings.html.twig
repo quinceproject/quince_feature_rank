@@ -1,0 +1,250 @@
+{# Ekran modułu w stylistyce silnika: ten sam layout, te same komponenty. #}
+{% extends '@Modules/quince_engine/views/templates/admin/layout.html.twig' %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/tree.html.twig' as tree %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/fields.html.twig' as fields %}
+
+{% trans_default_domain 'Modules.Quincefeaturerank.Admin' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine.min.js') ~ qcVer }}" defer></script>
+    {{ tree.assets(qcVer) }}
+{% endblock %}
+
+{% block quince_intro %}
+    <div class="qc-alert qc-alert-info">
+        {{ icons.icon('info', 18, 'qc-alert-icon') }}
+        <div>
+            {{ 'Under the short description the product page shows a few features. Here you see which ones the shop picked for a category, and why it skipped the rest.'|trans }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block quince_actions_info %}
+    {{ 'Saves the conditions and the decisions from the table, then refreshes the ranking of the category you are looking at.'|trans }}
+{% endblock %}
+
+{% block quince_actions %}
+    {# Osobne przeliczenie bez zapisu: katalog zmienia się między wizytami
+       w panelu, a sprzedawca, który właśnie uzupełnił cechy przy stu produktach,
+       chce zobaczyć skutek bez ruszania warunków. #}
+    <button type="submit" form="quince-feature-rank" class="qc-btn qc-btn-primary">
+        {{ icons.icon('check', 14) }} {{ 'Save'|trans }}
+    </button>
+{% endblock %}
+
+{% block quince_body %}
+{# `|raw`: wynik makra jest domyślnie ekranowany, a to jest kod JavaScriptu —
+   bez tego cudzysłowy zamieniają się w encje i skrypt się nie parsuje. #}
+{{ tree.dane('QUINCE_KATEGORIE', kategorie, 'quince_feature_rank_settings')|raw }}
+
+{# Formularz decyzji stoi POZA tabelą, a przyciski wskazują go atrybutem `form`:
+   formularz w komórce tabeli jest niepoprawnym znacznikiem, a zagnieżdżony
+   w formularzu ustawień wysyłałby przy okazji całą resztę ekranu. #}
+<form id="quince-frank-recompute" method="post" action="{{ path('quince_feature_rank_recompute') }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_feature_rank_recompute') }}">
+</form>
+
+{# Stan decyzji jako zmienna, nie w atrybucie `x-data`: tablica ma w zapisie
+   cudzysłowy, a atrybut HTML jest nimi ograniczony, więc rozrywa znacznik
+   i komponent w ogóle nie powstaje. #}
+<script>
+    var QUINCE_STANY = [
+        {%- for cecha in podglad.cechy -%}
+            {{ cecha.stan|json_encode|raw }}{{ loop.last ? '' : ',' }}
+        {%- endfor -%}
+    ];
+</script>
+
+{# Jeden formularz na obie karty, z klasą `qc-stack`: obejmuje warunki ORAZ
+   decyzje o cechach, więc zaznaczenie kilku cech nie przeładowuje strony
+   po każdym kliknięciu, tylko czeka na zapis. Przy okazji karty dostają
+   odstęp: wcześniej znacznik formularza stał między nimi i reguła odstępu,
+   oparta na sąsiedztwie kart, przestawała działać. #}
+<form id="quince-feature-rank" class="qc-stack" method="post"
+      action="{{ path('quince_feature_rank_save') }}"
+      x-data="{ stany: QUINCE_STANY, brudny: false }"
+      @input="brudny = true" @change="brudny = true">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_feature_rank_save') }}">
+    <input type="hidden" name="id_category" value="{{ wybrana ? wybrana.id : 0 }}">
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'When a feature makes the list'|trans }}</div>
+                <div class="qc-card-desc">
+                    {{ 'Two conditions checked in every category. Changing them recomputes the ranking for the whole shop.'|trans }}
+                </div>
+            </div>
+        </div>
+
+        <div class="qc-card-body">
+            <div class="qc-form-grid qc-form-grid-2">
+                <div class="qc-field">
+                    <label class="qc-label" for="q-coverage">{{ 'Filled in for at least (%)'|trans }}</label>
+                    <input type="number" class="qc-field-base qc-focusable" id="q-coverage"
+                           name="MIN_COVERAGE" value="{{ pokrycie }}" min="10" max="100" step="5"
+                           style="inline-size:120px">
+                    <div class="qc-hint">
+                        {{ 'A feature filled in for fewer products than this is left out. On the rest of the cards it would be an empty row. Lower it while you are still filling the catalogue in.'|trans }}
+                    </div>
+                </div>
+
+                <div class="qc-field">
+                    <label class="qc-label">{{ 'After catalogue changes'|trans }}</label>
+                    {{ fields.toggle('AUTO', progi.AUTO == '1', 'Recompute on its own'|trans) }}
+                    <div class="qc-hint">
+                        {{ 'A changed product marks its categories for recomputing, and the ranking is worked out again the first time someone opens a product from such a category. Leave this off while you are importing: the ranking then waits for you to press the button.'|trans }}
+                    </div>
+                </div>
+
+                <div class="qc-field">
+                    <label class="qc-label">{{ 'Features with one value'|trans }}</label>
+                    {{ fields.toggle('SKIP_UNIFORM', progi.SKIP_UNIFORM == '1', 'Leave them out'|trans) }}
+                    <div class="qc-hint">
+                        {{ 'A feature that has the same value for every product in the category says nothing about this one. Turn this off if your shop wants it on the card anyway.'|trans }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="qc-card">
+    <div class="qc-card-head">
+        <div>
+            <div class="qc-card-title">{{ 'What is in the category'|trans }}</div>
+            <div class="qc-card-desc">
+                {% if podsumowanie.kiedy %}
+                    {{ 'Last computed: %when%.'|trans({'%when%': podsumowanie.kiedy}) }}
+                {% else %}
+                    {{ 'Nothing computed yet. Use "Recompute all categories".'|trans }}
+                {% endif %}
+            </div>
+        </div>
+
+        {# Przeliczenie stoi przy wyborze kategorii, a nie w pasku zapisu: liczy
+           z bieżącego katalogu i niczego z formularza nie zapisuje, więc obok
+           przycisku „Save" czytało się jak drugi zapis.
+           `align-items: flex-end` zrównuje przycisk z polem, nie z jego etykietą. #}
+        <div style="display:flex;align-items:flex-end;gap:8px">
+            {{ tree.picker('QUINCE_KATEGORIE', wybrana ? wybrana.id : 0, 'Category to inspect'|trans, '320px') }}
+
+            {# Przeliczenie nie zapisuje formularza, wiec zmiany, ktorych sklep
+               jeszcze nie zapisal, po nim znikaja. Ostrzezenie tylko wtedy, gdy
+               naprawde jest co stracic: pytanie przy kazdym kliknieciu przestaje
+               byc czytane po trzecim razie. #}
+            <button type="submit" form="quince-frank-recompute" class="qc-btn qc-btn-outline"
+                    @click="if (brudny && !confirm('{{ 'You have changes that are not saved. Recomputing does not save them, so they will be lost. Continue?'|trans|e('js') }}')) $event.preventDefault()">
+                {{ icons.icon('refresh', 14) }} {{ 'Recompute all categories'|trans }}
+            </button>
+        </div>
+    </div>
+
+    <div class="qc-card-body">
+        {# ── Co klient zobaczy ──
+           Pierwsze na ekranie, bo to jest odpowiedź na pytanie „co będę miał
+           na stronie". Reszta tabeli tłumaczy tylko, czemu akurat to. #}
+        {% if podglad.przyklad %}
+            <div class="qc-field">
+                <label class="qc-label">{{ 'This is what a customer sees'|trans }}</label>
+                <div class="qc-tool-card">
+                    <div class="qc-tool-card-title">{{ podglad.przyklad.nazwa }}</div>
+                    {% if podglad.przyklad.wiersze is empty %}
+                        <div class="qc-tool-card-desc">{{ 'No features would be shown for this product.'|trans }}</div>
+                    {% else %}
+                        <table class="qc-table" style="margin-block-start:8px">
+                            <tbody>
+                                {% for wiersz in podglad.przyklad.wiersze %}
+                                    <tr>
+                                        <td style="width:40%">{{ wiersz.nazwa }}</td>
+                                        <td><strong>{{ wiersz.wartosc }}</strong></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if podglad.cechy is empty %}
+            <div class="qc-empty">
+                <div class="qc-empty-icon">{{ icons.icon('box', 28) }}</div>
+                <div class="qc-empty-text">
+                    {{ 'No products with features in this category.'|trans }}
+                </div>
+            </div>
+        {% else %}
+            <label class="qc-label" style="margin-block-start:16px">{{ 'Why these and not others'|trans }}</label>
+            <div class="qc-table-wrap">
+                <table class="qc-table">
+                    <thead>
+                        <tr>
+                            <th>{{ 'Feature'|trans }}</th>
+                            <th>{{ 'Values in this category'|trans }}</th>
+                            <th class="qc-num">{{ 'Products'|trans }}</th>
+                            <th>{{ 'On the product page'|trans }}</th>
+                            <th>{{ 'Your decision'|trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cecha in podglad.cechy %}
+                            <tr>
+                                <td>{{ cecha.nazwa }}</td>
+
+                                {# Prawdziwe wartości, nie procent. Dopiero po nich widać,
+                                   czemu cecha coś znaczy albo nie znaczy nic. #}
+                                <td>
+                                    {{ cecha.przyklady|join(', ') }}{{ cecha.wartosci > cecha.przyklady|length ? ' …' }}
+                                    <div class="qc-hint" style="margin-block-start:2px">
+                                        {{ '%count% different'|trans({'%count%': cecha.wartosci}) }}
+                                    </div>
+                                </td>
+
+                                <td class="qc-num">
+                                    {{ cecha.produktow }} / {{ podglad.produktow }}
+                                </td>
+
+                                <td>
+                                    {% if cecha.powod == 'shown' %}
+                                        <span class="qc-pin">{{ '%n%. place'|trans({'%n%': cecha.pozycja}) }}</span>
+                                    {% elseif cecha.powod == 'all-the-same' %}
+                                        {{ 'no. Every product has the same value'|trans }}
+                                    {% elseif cecha.powod == 'rarely-filled' %}
+                                        {{ 'no. Filled in too rarely, most cards would show a blank row'|trans }}
+                                    {% elseif cecha.powod == 'skipped' %}
+                                        {{ 'no. You left it out'|trans }}
+                                    {% else %}
+                                        {{ 'no. Other features come first'|trans }}
+                                    {% endif %}
+                                </td>
+
+                                {# Decyzja siedzi w stanie strony, nie w osobnym formularzu:
+                                   zaznaczenie trzech cech ma być trzema kliknięciami
+                                   i jednym zapisem, a nie trzema przeładowaniami. #}
+                                <td>
+                                    <input type="hidden" name="override[{{ cecha.id }}]"
+                                           :value="stany[{{ loop.index0 }}]">
+
+                                    <div class="qc-row-actions" style="opacity:1">
+                                        <button type="button" class="qc-btn qc-btn-sm"
+                                                :class="stany[{{ loop.index0 }}] === 'pin' ? 'qc-btn-primary' : 'qc-btn-outline'"
+                                                @click="stany[{{ loop.index0 }}] = stany[{{ loop.index0 }}] === 'pin' ? '' : 'pin'; brudny = true"
+                                                x-text="stany[{{ loop.index0 }}] === 'pin' ? '{{ 'Always shown'|trans }}' : '{{ 'Always show'|trans }}'"></button>
+
+                                        <button type="button" class="qc-btn qc-btn-sm"
+                                                :class="stany[{{ loop.index0 }}] === 'skip' ? 'qc-btn-primary' : 'qc-btn-outline'"
+                                                @click="stany[{{ loop.index0 }}] = stany[{{ loop.index0 }}] === 'skip' ? '' : 'skip'; brudny = true"
+                                                x-text="stany[{{ loop.index0 }}] === 'skip' ? '{{ 'Left out'|trans }}' : '{{ 'Leave out'|trans }}'"></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+</div>
+</form>
+{% endblock %}
