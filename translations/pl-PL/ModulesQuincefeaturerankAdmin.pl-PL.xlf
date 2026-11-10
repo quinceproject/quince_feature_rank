@@ -227,6 +227,11 @@
         <target>nie. Pominięta przez ciebie</target>
         <note>views/templates/admin/settings.html.twig</note>
       </trans-unit>
+      <trans-unit id="853e0b6934a0808c20231177c795df2d">
+        <source>Invalid security token, please try again.</source>
+        <target>Nieprawidłowy token bezpieczeństwa, spróbuj ponownie.</target>
+        <note>src/Controller/Admin/SettingsController.php</note>
+      </trans-unit>
     </body>
   </file>
 </xliff>

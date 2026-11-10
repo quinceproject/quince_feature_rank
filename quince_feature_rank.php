@@ -44,7 +44,7 @@ class Quince_Feature_Rank extends Module
     {
         $this->name = 'quince_feature_rank';
         $this->tab = 'front_office_features';
-        $this->version = '0.1.0';
+        $this->version = '0.1.1';
         $this->author = 'Quince Project';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = ['min' => '9.0.0', 'max' => '9.99.99'];
