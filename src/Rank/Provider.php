@@ -20,12 +20,11 @@ use Tools;
 /**
  * Odpowiada na pytanie: które cechy tego produktu pokazać i w jakiej kolejności.
  *
- * Kolejność bierze się z rankingu kategorii, W KTÓREJ PRODUKT JEST OGLĄDANY —
+ * Kolejność bierze się z rankingu kategorii, W KTÓREJ PRODUKT JEST OGLĄDANY,
  * nie z domyślnej. Ten sam akumulator w dziale „Akumulatory" ma pokazać pojemność,
  * a w „Zestawach naprawczych" długość przewodu. Gdy kategorii nie da się ustalić
  * (wejście z wyszukiwarki, bezpośredni odnośnik), schodzimy do kategorii domyślnej
- * produktu — bo lepsza kolejność ustalona dla jakiegoś działu niż kolejność
- * przypadkowa z katalogu.
+ * produktu.
  */
 final class Provider
 {
@@ -38,7 +37,7 @@ final class Provider
     /**
      * Ustawia cechy produktu w kolejności rankingu i przycina do limitu.
      *
-     * Cechy spoza rankingu nie znikają — lądują za nim, w swojej kolejności
+     * Cechy spoza rankingu nie znikają, tylko lądują za nim, w swojej kolejności
      * z katalogu. Bez tego produkt z cechą, której kategoria jeszcze nie policzyła,
      * pokazywałby mniej wierszy niż sąsiedni, bez żadnego widocznego powodu.
      *
@@ -69,7 +68,7 @@ final class Provider
     /**
      * Nazwy cech produktu w kolejności rankingu.
      *
-     * Cechy spoza rankingu nie znikają — idą za nim, w kolejności katalogu.
+     * Cechy spoza rankingu nie znikają, tylko idą za nim, w kolejności katalogu.
      * Bez tego produkt z cechą, której kategoria jeszcze nie policzyła, pokazywałby
      * mniej wierszy niż sąsiedni, bez widocznego powodu.
      *
@@ -145,7 +144,7 @@ final class Provider
      *
      * Kolejność sprawdzania: kategoria z kontekstu wejścia, potem domyślna
      * produktu, potem ich przodkowie. Zejście do przodka jest tu, bo kategoria
-     * z kilkoma produktami nie daje statystyki — a jej rodzic zwykle daje.
+     * z kilkoma produktami nie daje statystyki, a jej rodzic zwykle daje.
      *
      * @return int[]
      */
@@ -232,7 +231,7 @@ final class Provider
     /**
      * Nazwa cechy → jej identyfikator, dla cech tego produktu.
      *
-     * Rdzeń podaje szablonowi `grouped_features` bez `id_feature` — zostaje nazwa.
+     * Rdzeń podaje szablonowi `grouped_features` bez `id_feature`, zostaje nazwa.
      * Mapowanie robimy więc raz, po nazwach cech tego jednego produktu, zamiast
      * przepisywać całe `grouped_features` w rdzeniu.
      *

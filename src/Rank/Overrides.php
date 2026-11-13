@@ -16,18 +16,17 @@ use Db;
 /**
  * Decyzje sklepu, które przebijają wyliczony ranking.
  *
- * Ranking jest statystyką i czasem się myli — albo raczej: liczy dobrze, a sklep
- * wie coś, czego w danych nie ma. „Norma emisji" wypełniona u połowy filtrów
+ * Ranking jest statystyką, a sklep wie coś, czego w danych nie ma. „Norma emisji" wypełniona u połowy filtrów
  * wypada z listy, choć to pierwsza rzecz, o którą pyta klient warsztatu. I odwrotnie:
  * cecha poprawna statystycznie bywa dla sklepu nieistotna.
  *
  * Dwa stany, oba na jedną kategorię:
- *   PRZYPIETA  — pokaż zawsze, na początku listy, bez sprawdzania warunków,
- *   POMINIETA  — nie pokazuj nigdy, choćby wygrywała ranking.
+ *   PRZYPIETA:  pokaż zawsze, na początku listy, bez sprawdzania warunków,
+ *   POMINIETA:  nie pokazuj nigdy, choćby wygrywała ranking.
  *
  * Decyzja jest per kategoria, nie globalna, bo ta sama cecha znaczy co innego
- * w różnych działach — dokładnie z tego powodu, dla którego w ogóle liczymy
- * ranking osobno dla każdej kategorii.
+ * w różnych działach (z tego samego powodu ranking liczymy osobno dla każdej
+ * kategorii).
  */
 final class Overrides
 {

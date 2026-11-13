@@ -30,7 +30,7 @@ final class Storage
      *
      * Kasujemy i wstawiamy w jednej transakcji, bo między kasowaniem a wstawieniem
      * karta produktu czytająca tę kategorię zobaczyłaby pustkę i pokazała cechy
-     * w kolejności katalogu — migot, którego nikt nie umie powtórzyć przy zgłoszeniu.
+     * w kolejności katalogu.
      *
      * @param array<int,array{id_feature:int,pokrycie:float,rozdzielczosc:float,wynik:float}> $wiersze
      */

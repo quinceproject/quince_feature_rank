@@ -1,8 +1,7 @@
 # Ekran modułu w panelu silnika.
 #
-# _legacy_controller wskazuje zakładkę silnika, bo ekran żyje w jego panelu —
-# dzięki temu nie zakładamy własnej zakładki tylko po to, żeby PrestaShop miał
-# gdzie sprawdzić uprawnienia.
+# _legacy_controller wskazuje zakładkę silnika, bo ekran żyje w jego panelu.
+# Uprawnienia PrestaShop sprawdza więc na zakładce silnika.
 
 quince_feature_rank_settings:
   path: quince/feature-rank

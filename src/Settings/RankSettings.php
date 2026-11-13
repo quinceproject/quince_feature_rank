@@ -17,13 +17,10 @@ use Quince\Engine\Settings\ConfigStore;
 /**
  * Warunki, po których cecha wchodzi na listę.
  *
- * Ustawia je sklep, nie kod. To są decyzje o katalogu, a nie o algorytmie:
- * sklep z kompletnie uzupełnionymi cechami może chcieć progu 90 %, a taki,
- * który dopiero uzupełnia dane, zejdzie do 40 %, żeby cokolwiek się pokazało.
- * Wpisanie tych liczb na sztywno znaczyłoby, że jedyne wyjście przy złym
- * dopasowaniu to wyłączenie całego mechanizmu.
+ * Ustawia je sklep, nie kod, bo zależą od tego, jak kompletnie katalog ma
+ * uzupełnione cechy.
  *
- * Po każdej zmianie ranking wymaga przeliczenia — zapisane wyniki powstały
+ * Po każdej zmianie ranking wymaga przeliczenia, bo zapisane wyniki powstały
  * przy poprzednich warunkach. Robi to ekran, zaraz po zapisie.
  */
 final class RankSettings
@@ -46,7 +43,7 @@ final class RankSettings
         'AUTO' => '0',
     ];
 
-    /** Kategorie czekające na przeliczenie — lista identyfikatorów po przecinku. */
+    /** Kategorie czekające na przeliczenie: lista identyfikatorów po przecinku. */
     private const BRUDNE = 'QUINCE_FRANK_DIRTY';
 
     /** @return array<string,string> */
@@ -62,7 +59,7 @@ final class RankSettings
         return $out;
     }
 
-    /** Próg wypełnienia jako ułamek — w takiej postaci liczy go kalkulator. */
+    /** Próg wypełnienia jako ułamek, w takiej postaci liczy go kalkulator. */
     public function minPokrycie(): float
     {
         return $this->procent() / 100;
@@ -136,7 +133,7 @@ final class RankSettings
         }
 
         // Makro przełącznika wysyła przed nim pole ukryte z zerem, więc wartość
-        // przychodzi zawsze — także przy wyłączonym. Osobny znacznik formularza
+        // przychodzi zawsze, także przy wyłączonym. Osobny znacznik formularza
         // nie jest tu potrzebny.
         if (array_key_exists('SKIP_UNIFORM', $values)) {
             ConfigStore::set(self::PREFIX . 'SKIP_UNIFORM', $values['SKIP_UNIFORM'] === '1' ? '1' : '0');

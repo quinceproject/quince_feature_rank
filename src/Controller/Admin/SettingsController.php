@@ -26,15 +26,10 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Ekran rankingu cech.
  *
- * Ranking jest wyliczany, nie ustawiany, więc ten ekran przede wszystkim POKAZUJE:
- * dlaczego w tej kategorii wygrały akurat te cechy. Bez tego sprzedawca widzi na
- * karcie produktu cechy, których nie wybierał, i pierwsze, co robi, to wyłącza
- * mechanizm.
+ * Ranking jest wyliczany, nie ustawiany, więc ten ekran przede wszystkim POKAZUJE,
+ * dlaczego w danej kategorii wygrały akurat te cechy.
  *
- * Widok jest PO JEDNEJ KATEGORII, a nie zrzutem wszystkiego. Sklep z sześćdziesięcioma
- * kategoriami dawał ścianę wierszy, w której nie dało się niczego znaleźć — a i tak
- * sprzedawca przychodzi tu z konkretną kategorią w głowie, bo zobaczył coś dziwnego
- * na konkretnej karcie produktu.
+ * Widok jest PO JEDNEJ KATEGORII, a nie zrzutem wszystkich naraz.
  */
 class SettingsController extends QuinceController
 {
@@ -134,7 +129,7 @@ class SettingsController extends QuinceController
     /**
      * Decyzje o cechach w oglądanej kategorii: przypięcie, pominięcie albo brak.
      *
-     * Przychodzą wszystkie naraz, razem z warunkami — jedno kliknięcie zapisu
+     * Przychodzą wszystkie naraz, razem z warunkami: jedno kliknięcie zapisu
      * po dowolnej liczbie zmian w tabeli.
      */
     private function zapiszDecyzje(Request $request, int $idShop): void
@@ -156,9 +151,8 @@ class SettingsController extends QuinceController
     /**
      * Przelicza ranking dla bieżącego sklepu.
      *
-     * Ręcznie, z panelu — bo katalog zmienia się między przeliczeniami w tle,
-     * a sprzedawca, który właśnie uzupełnił cechy przy stu produktach, chce
-     * zobaczyć skutek teraz, a nie jutro.
+     * Ręcznie, z panelu, żeby skutek zmian w cechach było widać od razu,
+     * bez czekania na przeliczenie w tle.
      */
     public function recomputeAction(Request $request): RedirectResponse
     {
@@ -252,7 +246,7 @@ class SettingsController extends QuinceController
             ];
         }
 
-        // Ścieżka przodków i informacja o dzieciach — drzewo w panelu musi wiedzieć,
+        // Ścieżka przodków i informacja o dzieciach: drzewo w panelu musi wiedzieć,
         // co zwinąć i przy czym postawić strzałkę. Liczymy to raz tutaj, bo w szablonie
         // wychodziłaby z tego pętla po pętli przy każdym wierszu.
         foreach ($kategorie as $id => $kategoria) {

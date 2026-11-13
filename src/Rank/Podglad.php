@@ -15,7 +15,7 @@ use Db;
 use Quince\FeatureRank\Settings\RankSettings;
 
 /**
- * Co naprawdę siedzi w kategorii — dane dla ekranu, nie dla rankingu.
+ * Co naprawdę siedzi w kategorii: dane dla ekranu, nie dla rankingu.
  *
  * `Calculator` liczy wynik i odrzuca, co nie przeszło progów. Do wyjaśnienia
  * sprzedawcy, DLACZEGO na karcie produktu widzi akurat te cechy, to nie
@@ -159,7 +159,7 @@ final class Podglad
     }
 
     /**
-     * Powód po ludzku — jedno zdanie, którym da się to komuś wytłumaczyć.
+     * Powód po ludzku: jedno zdanie, którym da się to komuś wytłumaczyć.
      *
      * Kolejność sprawdzania odpowiada kolejności odsiewania w `Calculator`, więc
      * sprzedawca widzi ten warunek, który naprawdę zadecydował, a nie pierwszy

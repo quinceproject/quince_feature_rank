@@ -22,21 +22,19 @@ use Quince\FeatureRank\Rank\Storage;
 use Quince\FeatureRank\Settings\RankSettings;
 
 /**
- * Quince Feature Rank — które cechy produktu naprawdę coś mówią.
+ * Quince Feature Rank: które cechy produktu naprawdę coś mówią.
  *
  * Karta produktu pokazuje pod opisem kilka cech podstawowych. Bez tego modułu
- * bierze pierwsze z brzegu, w kolejności katalogu — a ta kolejność powstała przy
- * wprowadzaniu towaru i z niczym się nie wiąże. Moduł zastępuje ją rankingiem
+ * bierze pierwsze w kolejności katalogu. Moduł zastępuje ją rankingiem
  * liczonym z tego, jak cechy rozkładają się w kategorii, w której produkt jest
  * oglądany: wybiera te, które w tym dziale faktycznie odróżniają jeden produkt
  * od drugiego.
  *
  * Ranking jest przeliczany w tle, bo na katalogu z dziesiątkami tysięcy produktów
- * to jest zadanie na sekundy, a nie coś, za co ma zapłacić klient otwierający kartę.
+ * to jest zadanie na sekundy, którego nie wolno liczyć przy otwieraniu karty.
  *
- * Moduł zgłasza się silnikowi hookiem `actionQuinceRegisterFeature`. Sklep bez
- * tego modułu nie traci cech podstawowych — silnik pokazuje je w kolejności
- * katalogu, tak jak dotąd.
+ * Moduł zgłasza się silnikowi hookiem `actionQuinceRegisterFeature`. Bez tego
+ * modułu silnik pokazuje cechy podstawowe w kolejności katalogu.
  */
 class Quince_Feature_Rank extends Module
 {
@@ -109,7 +107,7 @@ class Quince_Feature_Rank extends Module
     public function hookActionQuinceRegisterFeature(): array
     {
         return [[
-            // Typ jest tu potrzebny, bo silnik z tej możliwości KORZYSTA — pyta
+            // Typ jest tu potrzebny, bo silnik z tej możliwości KORZYSTA: pyta
             // o kolejność cech przy składaniu strony produktu. Sama pozycja
             // w menu typu nie wymaga.
             'type' => \Quince\Engine\Feature\FeatureRegistry::TYPE_FEATURE_RANK,
@@ -121,7 +119,7 @@ class Quince_Feature_Rank extends Module
     }
 
     /**
-     * Nazwy cech produktu w kolejności rankingu — usługa dla silnika.
+     * Nazwy cech produktu w kolejności rankingu: usługa dla silnika.
      *
      * Nazwy, nie identyfikatory: rdzeń podaje szablonowi `grouped_features`
      * bez `id_feature`, więc nazwa jest tam jedynym kluczem, po którym da się
@@ -182,7 +180,7 @@ class Quince_Feature_Rank extends Module
      * Skasowany produkt też zmienia statystykę kategorii, w której stał.
      *
      * Powiązania w `category_product` znikają razem z produktem, więc kategorie
-     * czytamy z parametrów hooka, a nie z bazy — po skasowaniu nie ma już czego
+     * czytamy z parametrów hooka, a nie z bazy: po skasowaniu nie ma już czego
      * pytać.
      *
      * @param array<string,mixed> $params
@@ -211,7 +209,7 @@ class Quince_Feature_Rank extends Module
      * Przelicza wszystkie kategorie sklepu.
      *
      * Kategorie bez wyniku (za mało produktów, żadna cecha nie przeszła progu
-     * pokrycia) zostają w tabeli puste — i to jest poprawny stan, bo `Provider`
+     * pokrycia) zostają w tabeli puste. To poprawny stan, bo `Provider`
      * schodzi wtedy do kategorii nadrzędnej.
      */
     public function przeliczSklep(int $idShop): int
@@ -229,7 +227,7 @@ class Quince_Feature_Rank extends Module
     }
 
     /**
-     * Kategorie sklepu bez korzenia — korzeń zawiera wszystko, więc jego ranking
+     * Kategorie sklepu bez korzenia. Korzeń zawiera wszystko, więc jego ranking
      * jest rankingiem całego katalogu i nie odróżnia niczego od niczego.
      *
      * @return int[]

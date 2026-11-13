@@ -35,8 +35,8 @@
 {% endblock %}
 
 {% block quince_body %}
-{# `|raw`: wynik makra jest domyślnie ekranowany, a to jest kod JavaScriptu —
-   bez tego cudzysłowy zamieniają się w encje i skrypt się nie parsuje. #}
+{# `|raw`: wynik makra jest domyślnie ekranowany, a to jest kod JavaScriptu.
+   Bez tego cudzysłowy zamieniają się w encje i skrypt się nie parsuje. #}
 {{ tree.dane('QUINCE_KATEGORIE', kategorie, 'quince_feature_rank_settings')|raw }}
 
 {# Formularz decyzji stoi POZA tabelą, a przyciski wskazują go atrybutem `form`:

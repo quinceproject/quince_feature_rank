@@ -17,20 +17,17 @@ use Quince\FeatureRank\Settings\RankSettings;
 /**
  * Liczy, które cechy najwięcej mówią o produkcie w danej kategorii.
  *
- * Pytanie brzmi: z kilkunastu cech wypełnionych przy produkcie, które pokazać pod
- * opisem? Odpowiedź nie może być stała dla całego sklepu, bo ta sama cecha znaczy
- * co innego w różnych działach. „Rodzaj: filtr oleju" w kategorii filtrów oleju
- * jest prawdą, która nie mówi nic — wszystkie tam takie są. Ta sama cecha
- * w kategorii „Filtry" dzieli towar na oleju, paliwa i powietrza i staje się
- * pierwszą rzeczą, na którą klient patrzy.
+ * Wynik jest osobny dla każdej kategorii, bo ta sama cecha znaczy co innego
+ * w różnych działach. „Rodzaj: filtr oleju" w kategorii filtrów oleju nie mówi
+ * nic, bo wszystkie tam takie są. Ta sama cecha w kategorii „Filtry" dzieli
+ * towar na oleju, paliwa i powietrza.
  *
- * Reguła jest prosta i da się ją powiedzieć jednym zdaniem: pokazujemy cechy
- * wypełnione u największej liczby produktów, pomijając te, które u wszystkich mają
- * tę samą wartość.
+ * Reguła: pokazujemy cechy wypełnione u największej liczby produktów, pomijając
+ * te, które u wszystkich mają tę samą wartość.
  *
- * Czego tu świadomie NIE MA: progu minimalnej wielkości kategorii. Kategoria
- * z czterema produktami, w której każdy ma wpisaną średnicę gwintu, jest doskonale
- * opisana — odbicie jej do kategorii nadrzędnej pokazywałoby cechy dobrane pod
+ * Celowo NIE MA progu minimalnej wielkości kategorii. Kategoria z czterema
+ * produktami, w której każdy ma wpisaną średnicę gwintu, jest dobrze opisana,
+ * a odbicie jej do kategorii nadrzędnej pokazywałoby cechy dobrane pod
  * inny, szerszy zbiór towaru. Do rodzica schodzimy wyłącznie wtedy, gdy kategoria
  * nie ma żadnych cech.
  */
@@ -80,13 +77,11 @@ final class Calculator
                 'id_feature' => (int) $wiersz['id_feature'],
                 'pokrycie' => round($pokrycie, 4),
                 'rozdzielczosc' => round($this->rozdzielczosc($wartosci, $zCecha), 4),
-                // Kolejność stanowi wypełnienie — cecha wpisana u wszystkich jest
+                // Kolejność stanowi wypełnienie: cecha wpisana u wszystkich jest
                 // pewniejsza niż wpisana u dwóch trzecich. Liczba wartości rozstrzyga
                 // remis, bo przy równym wypełnieniu więcej znaczy więcej do porównania.
                 //
-                // Przypięta idzie przed wszystkie wyliczone: sklep, który powiedział
-                // „tę pokazuj zawsze", ma ją zobaczyć na górze, a nie na piątym
-                // miejscu za cechami, które akurat wypadły lepiej w statystyce.
+                // Przypięta idzie przed wszystkie wyliczone (+100 do wyniku).
                 'wynik' => round(($stan === Overrides::PRZYPIETA ? 100 : 0)
                     + $pokrycie + min($wartosci, 20) / 1000, 4),
             ];
@@ -102,13 +97,12 @@ final class Calculator
      *
      * Warunek włącza sklep: cecha o tej samej wartości u wszystkich jest prawdziwa
      * i nic nie mówi o TYM produkcie, ale bywają katalogi, w których i taka informacja
-     * ma stać na karcie — stąd przełącznik, a nie reguła na sztywno.
+     * ma stać na karcie. Stąd przełącznik, a nie reguła na sztywno.
      *
-     * Czego tu świadomie NIE MA: odrzucania cech o wartości unikatowej dla każdego
-     * produktu. Taka reguła kasowałaby „Wymiary", „Wagę" i „Długość przewodu" —
-     * czyli często najważniejsze, co klient chce zobaczyć — a jedyne, co miałaby
-     * łapać, to dane, których w cechach się nie trzyma: numer produktu, EAN i kod
-     * producenta mają w PrestaShopie własne pola.
+     * Celowo NIE MA odrzucania cech o wartości unikatowej dla każdego produktu.
+     * Taka reguła kasowałaby „Wymiary", „Wagę" i „Długość przewodu", a jedyne,
+     * co miałaby łapać, to dane, których w cechach się nie trzyma: numer
+     * produktu, EAN i kod producenta mają w PrestaShopie własne pola.
      */
     private function odrozniaProdukty(int $wartosci): bool
     {
@@ -116,7 +110,7 @@ final class Calculator
     }
 
     /**
-     * Na ile cecha dzieli kategorię, w skali 0–1 — wyłącznie do pokazania na ekranie.
+     * Na ile cecha dzieli kategorię, w skali 0–1. Wyłącznie do pokazania na ekranie.
      *
      * Nie bierze udziału w kolejności; służy do wytłumaczenia sprzedawcy, czym się
      * różni cecha o dwóch wartościach od cechy o dwunastu.
