@@ -13,6 +13,7 @@ namespace Quince\FeatureRank\Controller\Admin;
 
 use Db;
 use Module;
+use PrestaShopBundle\Security\Attribute\AdminSecurity;
 use Quince\Engine\Controller\Admin\QuinceController;
 use Quince\FeatureRank\Rank\Calculator;
 use Quince\FeatureRank\Rank\Overrides;
@@ -41,6 +42,7 @@ class SettingsController extends QuinceController
     ) {
     }
 
+    #[AdminSecurity("is_granted('read', request.get('_legacy_controller'))", message: 'You do not have permission to view this.')]
     public function indexAction(Request $request): Response
     {
         $idShop = (int) $this->getContext()->shop->id;
@@ -79,6 +81,7 @@ class SettingsController extends QuinceController
      * zostałyby te sprzed zmiany, więc ekran pokazywałby jedno, a karty
      * produktów drugie, i nic by nie mówiło, że trzeba jeszcze coś kliknąć.
      */
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", message: 'You do not have permission to change this.')]
     public function saveAction(Request $request): RedirectResponse
     {
         if (!$this->isCsrfTokenValid('quince_feature_rank_save', $request->request->get('_csrf_token'))) {
@@ -154,6 +157,7 @@ class SettingsController extends QuinceController
      * Ręcznie, z panelu, żeby skutek zmian w cechach było widać od razu,
      * bez czekania na przeliczenie w tle.
      */
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", message: 'You do not have permission to change this.')]
     public function recomputeAction(Request $request): RedirectResponse
     {
         if (!$this->isCsrfTokenValid('quince_feature_rank_recompute', $request->request->get('_csrf_token'))) {

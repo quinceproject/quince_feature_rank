@@ -1,14 +1,15 @@
 # Ekran modułu w panelu silnika.
 #
-# _legacy_controller wskazuje zakładkę silnika, bo ekran żyje w jego panelu.
-# Uprawnienia PrestaShop sprawdza więc na zakładce silnika.
+# _legacy_controller wskazuje własną zakładkę modułu (`AdminQuinceFeatureRank`). Do niej
+# odnoszą się uprawnienia pracownika: atrybuty `#[AdminSecurity]` w kontrolerach
+# sprawdzają prawa do tej zakładki.
 
 quince_feature_rank_settings:
   path: quince/feature-rank
   methods: [GET]
   defaults:
     _controller: Quince\FeatureRank\Controller\Admin\SettingsController::indexAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceFeatureRank'
     _legacy_link: 'AdminQuince'
 
 quince_feature_rank_recompute:
@@ -16,7 +17,7 @@ quince_feature_rank_recompute:
   methods: [POST]
   defaults:
     _controller: Quince\FeatureRank\Controller\Admin\SettingsController::recomputeAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceFeatureRank'
     _legacy_link: 'AdminQuince'
 
 quince_feature_rank_save:
@@ -24,6 +25,6 @@ quince_feature_rank_save:
   methods: [POST]
   defaults:
     _controller: Quince\FeatureRank\Controller\Admin\SettingsController::saveAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceFeatureRank'
     _legacy_link: 'AdminQuince'
 
