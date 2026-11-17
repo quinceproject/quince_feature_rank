@@ -104,10 +104,12 @@ class SettingsController extends QuinceController
         $warunkiZmienione = $this->ustawienia->all() !== $przedZmiana;
 
         $this->zapiszDecyzje($request, $idShop);
+        $wszedzieZmienione = $this->zapiszWszedzie($request, $idShop);
 
         $modul = Module::getInstanceByName('quince_feature_rank');
 
-        if ($warunkiZmienione) {
+        // Pominięcie we wszystkich kategoriach zmienia ranking każdej z nich.
+        if ($warunkiZmienione || $wszedzieZmienione) {
             $ile = $modul->przeliczSklep($idShop);
 
             $this->addFlash('success', $this->trans(
@@ -153,6 +155,40 @@ class SettingsController extends QuinceController
         foreach ($przyslane as $idFeature => $stan) {
             $overrides->ustaw($idCategory, $idShop, (int) $idFeature, (string) $stan);
         }
+    }
+
+    /**
+     * Pominięcie we wszystkich kategoriach dla cech z oglądanej tabeli.
+     *
+     * Zapisujemy tylko cechy, które przyszły z formularza: cecha pominięta
+     * wszędzie, a nieobecna w tej kategorii, zostaje pominięta.
+     *
+     * @return bool czy coś się zmieniło (wtedy trzeba przeliczyć cały sklep)
+     */
+    private function zapiszWszedzie(Request $request, int $idShop): bool
+    {
+        $przyslane = $request->request->all('everywhere');
+
+        if (!is_array($przyslane) || $przyslane === []) {
+            return false;
+        }
+
+        $overrides = new Overrides();
+        $teraz = array_flip($overrides->pominieteWszedzie($idShop));
+        $zmiana = false;
+
+        foreach ($przyslane as $idFeature => $wartosc) {
+            $pomin = (string) $wartosc === '1';
+
+            if ($pomin === isset($teraz[(int) $idFeature])) {
+                continue;
+            }
+
+            $overrides->ustawWszedzie($idShop, (int) $idFeature, $pomin);
+            $zmiana = true;
+        }
+
+        return $zmiana;
     }
 
     /**

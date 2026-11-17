@@ -4,6 +4,15 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.4] - 2026-11-17
+
+### Added
+
+- **Leave out in all categories** next to "Leave out": one click keeps a feature out
+  of the product page and the product cards in every category, also categories added
+  later. A decision made in a single category ("Always show" or "Leave out") still
+  wins there. Saving recomputes the ranking of all categories.
+
 ## [0.1.3] - 2026-11-16
 
 ### Changed

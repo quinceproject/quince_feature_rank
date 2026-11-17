@@ -55,6 +55,11 @@
             {{ cecha.stan|json_encode|raw }}{{ loop.last ? '' : ',' }}
         {%- endfor -%}
     ];
+    var QUINCE_WSZEDZIE = [
+        {%- for cecha in podglad.cechy -%}
+            {{ cecha.wszedzie ? 'true' : 'false' }}{{ loop.last ? '' : ',' }}
+        {%- endfor -%}
+    ];
 </script>
 
 {# Jeden formularz na obie karty, z klasą `qc-stack`: obejmuje warunki ORAZ
@@ -64,7 +69,7 @@
    oparta na sąsiedztwie kart, przestawała działać. #}
 <form id="quince-feature-rank" class="qc-stack" method="post"
       action="{{ path('quince_feature_rank_save') }}"
-      x-data="{ stany: QUINCE_STANY, brudny: false }"
+      x-data="{ stany: QUINCE_STANY, wszedzie: QUINCE_WSZEDZIE, brudny: false }"
       @input="brudny = true" @change="brudny = true">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_feature_rank_save') }}">
     <input type="hidden" name="id_category" value="{{ wybrana ? wybrana.id : 0 }}">
@@ -225,6 +230,8 @@
                                 <td>
                                     <input type="hidden" name="override[{{ cecha.id }}]"
                                            :value="stany[{{ loop.index0 }}]">
+                                    <input type="hidden" name="everywhere[{{ cecha.id }}]"
+                                           :value="wszedzie[{{ loop.index0 }}] ? '1' : '0'">
 
                                     <div class="qc-row-actions" style="opacity:1">
                                         <button type="button" class="qc-btn qc-btn-sm"
@@ -236,6 +243,11 @@
                                                 :class="stany[{{ loop.index0 }}] === 'skip' ? 'qc-btn-primary' : 'qc-btn-outline'"
                                                 @click="stany[{{ loop.index0 }}] = stany[{{ loop.index0 }}] === 'skip' ? '' : 'skip'; brudny = true"
                                                 x-text="stany[{{ loop.index0 }}] === 'skip' ? '{{ 'Left out'|trans }}' : '{{ 'Leave out'|trans }}'"></button>
+
+                                        <button type="button" class="qc-btn qc-btn-sm"
+                                                :class="wszedzie[{{ loop.index0 }}] ? 'qc-btn-primary' : 'qc-btn-outline'"
+                                                @click="wszedzie[{{ loop.index0 }}] = !wszedzie[{{ loop.index0 }}]; brudny = true"
+                                                x-text="wszedzie[{{ loop.index0 }}] ? '{{ 'Left out in all categories'|trans }}' : '{{ 'Leave out in all categories'|trans }}'"></button>
                                     </div>
                                 </td>
                             </tr>

@@ -40,6 +40,44 @@ final class Overrides
     public const POMINIETA = 'skip';
 
     /**
+     * Kategoria zero to „wszystkie kategorie”: cecha pominięta w całym sklepie
+     * jednym kliknięciem (np. „Pasuje do” z kilkunastoma wartościami). Decyzja
+     * w konkretnej kategorii ma pierwszeństwo, więc przypięcie tam nadal działa.
+     */
+    public const WSZEDZIE = 0;
+
+    /**
+     * Stan do liczenia rankingu: decyzja kategorii, a bez niej pominięcie
+     * we wszystkich kategoriach.
+     *
+     * @return array<int,string>
+     */
+    public function doRankingu(int $idCategory, int $idShop): array
+    {
+        $wynik = $this->dlaKategorii($idCategory, $idShop);
+
+        foreach ($this->pominieteWszedzie($idShop) as $idFeature) {
+            $wynik[$idFeature] ??= self::POMINIETA;
+        }
+
+        return $wynik;
+    }
+
+    /** @return int[] cechy pominięte we wszystkich kategoriach */
+    public function pominieteWszedzie(int $idShop): array
+    {
+        return array_keys(array_filter(
+            $this->dlaKategorii(self::WSZEDZIE, $idShop),
+            static fn (string $stan): bool => $stan === self::POMINIETA
+        ));
+    }
+
+    public function ustawWszedzie(int $idShop, int $idFeature, bool $pomin): void
+    {
+        $this->ustaw(self::WSZEDZIE, $idShop, $idFeature, $pomin ? self::POMINIETA : '');
+    }
+
+    /**
      * Stan każdej nadpisanej cechy w kategorii: id cechy => stan.
      *
      * @return array<int,string>

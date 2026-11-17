@@ -57,7 +57,7 @@ final class Calculator
         }
 
         $wiersze = [];
-        $nadpisane = $this->nadpisania->dlaKategorii($idCategory, $idShop);
+        $nadpisane = $this->nadpisania->doRankingu($idCategory, $idShop);
 
         foreach ($this->surowe($idCategory, $idShop) as $wiersz) {
             $idFeature = (int) $wiersz['id_feature'];

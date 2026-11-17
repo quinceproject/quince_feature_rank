@@ -47,7 +47,9 @@ final class Podglad
     {
         $produktow = $this->produktow($idCategory, $idShop);
         $ranking = array_flip((new Storage())->dlaKategorii($idCategory, $idShop));
-        $nadpisane = (new Overrides())->dlaKategorii($idCategory, $idShop);
+        $overrides = new Overrides();
+        $nadpisane = $overrides->dlaKategorii($idCategory, $idShop);
+        $wszedzie = array_flip($overrides->pominieteWszedzie($idShop));
         $cechy = [];
 
         foreach ($this->surowe($idCategory, $idShop, $idLang) as $w) {
@@ -58,6 +60,7 @@ final class Podglad
             $cechy[] = [
                 'id' => $idFeature,
                 'stan' => $nadpisane[$idFeature] ?? '',
+                'wszedzie' => isset($wszedzie[$idFeature]),
                 'nazwa' => (string) $w['nazwa'],
                 'produktow' => $zCecha,
                 'wartosci' => $wartosci,
@@ -68,7 +71,7 @@ final class Podglad
                     $zCecha,
                     $wartosci,
                     isset($ranking[$idFeature]),
-                    $nadpisane[$idFeature] ?? ''
+                    $nadpisane[$idFeature] ?? (isset($wszedzie[$idFeature]) ? Overrides::POMINIETA : '')
                 ),
             ];
         }

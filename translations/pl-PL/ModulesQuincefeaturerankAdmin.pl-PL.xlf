@@ -232,6 +232,16 @@
         <target>Nieprawidłowy token bezpieczeństwa, spróbuj ponownie.</target>
         <note>src/Controller/Admin/SettingsController.php</note>
       </trans-unit>
+      <trans-unit id="quince.frank.everywhere.leave">
+        <source>Leave out in all categories</source>
+        <target>Pomijaj we wszystkich kategoriach</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.everywhere.left">
+        <source>Left out in all categories</source>
+        <target>Pomijana we wszystkich kategoriach</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
     </body>
   </file>
 </xliff>
