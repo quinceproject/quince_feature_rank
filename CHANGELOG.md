@@ -4,6 +4,26 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-11-23
+
+### Added
+
+- **Filters on product lists**: the features from the ranking of all categories become
+  filters in one template of the Faceted search module (ps_facetedsearch), chosen from
+  the existing templates. Each feature is a checkbox with no limit of values; long
+  lists are folded by the Quince theme ("Show more", theme 0.1.17). Order: features
+  ranked in more categories first, then by average position, then by name. A feature
+  left out in all categories is not added.
+- The module sets the template for all categories of the shop and changes only its
+  features. Subcategories, brand, price, availability and the other filters stay as
+  set, in their order, before the features.
+- "Recompute all categories" also updates the filters when **Set the filters from the
+  ranking** is on. **Update the filters** does it without recomputing. Recomputing
+  a single category does not touch the filters; the screen warns when the ranking is
+  newer than the filters.
+- **Restore the previous template** brings back the template from before the last
+  update.
+
 ## [0.1.4] - 2026-11-17
 
 ### Added

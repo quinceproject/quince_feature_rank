@@ -242,6 +242,131 @@
         <target>Pomijana we wszystkich kategoriach</target>
         <note>views/templates/admin/settings.html.twig</note>
       </trans-unit>
+      <trans-unit id="quince.frank.facets.01">
+        <source>Filters on product lists</source>
+        <target>Filtry na listingu</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.02">
+        <source>The features from the ranking of all categories become filters in one filter template, used in every category. A category shows only the filters its products have.</source>
+        <target>Cechy z rankingów wszystkich kategorii stają się filtrami w jednym szablonie filtrów, używanym w każdej kategorii. Kategoria pokazuje tylko te filtry, które mają jej produkty.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.03">
+        <source>The Faceted search module (ps_facetedsearch) is not installed or is turned off, so there are no filters to set.</source>
+        <target>Moduł filtrów (ps_facetedsearch) nie jest zainstalowany albo jest wyłączony, więc nie ma czego ustawiać.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.04">
+        <source>After "Recompute all categories"</source>
+        <target>Po „Przelicz wszystkie kategorie”</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.05">
+        <source>Set the filters from the ranking</source>
+        <target>Ustawiaj filtry z rankingu</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.06">
+        <source>Recomputing all categories then also updates the filter template. Recomputing one category does not: the button below does it.</source>
+        <target>Przeliczenie wszystkich kategorii aktualizuje wtedy także szablon filtrów. Przeliczenie jednej kategorii tego nie robi: służy do tego przycisk niżej.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.07">
+        <source>Filter template</source>
+        <target>Szablon filtrów</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.08">
+        <source>Choose a template</source>
+        <target>Wybierz szablon</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.09">
+        <source>%count% categories</source>
+        <target>kategorie: %count%</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.10">
+        <source>The module replaces only the features in this template and sets it for all categories. Other filters (subcategories, brand, price, availability) stay as you set them, before the features.</source>
+        <target>Moduł wymienia w tym szablonie tylko cechy i przypisuje go do wszystkich kategorii. Pozostałe filtry (podkategorie, marka, cena, dostępność) zostają tak, jak je ustawiłeś, przed cechami.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.11">
+        <source>The ranking changed after the filters were last updated. Update the filters to bring them in line.</source>
+        <target>Ranking zmienił się po ostatniej aktualizacji filtrów. Zaktualizuj filtry, żeby były z nim zgodne.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.12">
+        <source>Filters from the ranking: %count% of %all% features in the shop</source>
+        <target>Filtry z rankingu: %count% z %all% cech sklepu</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.13">
+        <source>No ranking yet. Use "Recompute all categories".</source>
+        <target>Nie ma jeszcze rankingu. Użyj „Przelicz wszystkie kategorie”.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.14">
+        <source>Categories</source>
+        <target>Kategorie</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.15">
+        <source>Values</source>
+        <target>Wartości</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.16">
+        <source>Filters last updated: %when%.</source>
+        <target>Ostatnia aktualizacja filtrów: %when%.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.17">
+        <source>The module has not set the filters yet.</source>
+        <target>Moduł nie ustawiał jeszcze filtrów.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.18">
+        <source>Restore the filter template from before the last update (%when%)?</source>
+        <target>Przywrócić szablon filtrów sprzed ostatniej aktualizacji (%when%)?</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.19">
+        <source>Restore the previous template</source>
+        <target>Przywróć poprzedni szablon</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.20">
+        <source>You have changes that are not saved. The filters will use the saved settings. Continue?</source>
+        <target>Masz niezapisane zmiany. Filtry zostaną ustawione według zapisanych ustawień. Kontynuować?</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.21">
+        <source>Update the filters</source>
+        <target>Zaktualizuj filtry</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.22">
+        <source>Choose the filter template first and save.</source>
+        <target>Najpierw wybierz szablon filtrów i zapisz.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.23">
+        <source>The previous filter template is back.</source>
+        <target>Przywrócono poprzedni szablon filtrów.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.24">
+        <source>There is no previous version of the filter template to restore.</source>
+        <target>Nie ma poprzedniej wersji szablonu filtrów do przywrócenia.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
+      <trans-unit id="quince.frank.facets.25">
+        <source>Filters updated: %count% features in the filter template.</source>
+        <target>Filtry zaktualizowane: cech w szablonie filtrów: %count%.</target>
+        <note>views/templates/admin/settings.html.twig</note>
+      </trans-unit>
     </body>
   </file>
 </xliff>

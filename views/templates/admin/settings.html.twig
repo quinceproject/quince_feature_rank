@@ -45,6 +45,12 @@
 <form id="quince-frank-recompute" method="post" action="{{ path('quince_feature_rank_recompute') }}">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_feature_rank_recompute') }}">
 </form>
+<form id="quince-frank-facets-update" method="post" action="{{ path('quince_feature_rank_facets_update') }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_feature_rank_facets_update') }}">
+</form>
+<form id="quince-frank-facets-restore" method="post" action="{{ path('quince_feature_rank_facets_restore') }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_feature_rank_facets_restore') }}">
+</form>
 
 {# Stan decyzji jako zmienna, nie w atrybucie `x-data`: tablica ma w zapisie
    cudzysłowy, a atrybut HTML jest nimi ograniczony, więc rozrywa znacznik
@@ -112,6 +118,126 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    {# ── Filtry na listingu ──
+       Ten sam ranking ustawia cechy w szablonie modułu filtrów: jeden szablon,
+       wskazany przez sklep, dla wszystkich kategorii. Specyfikacja:
+       quince/docs/32-feature-rank-filtry-facet.md. #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Filters on product lists'|trans }}</div>
+                <div class="qc-card-desc">
+                    {{ 'The features from the ranking of all categories become filters in one filter template, used in every category. A category shows only the filters its products have.'|trans }}
+                </div>
+            </div>
+        </div>
+
+        <div class="qc-card-body">
+            {% if not filtry.dostepny %}
+                <div class="qc-alert qc-alert-info">
+                    {{ icons.icon('info', 18, 'qc-alert-icon') }}
+                    <div>{{ 'The Faceted search module (ps_facetedsearch) is not installed or is turned off, so there are no filters to set.'|trans }}</div>
+                </div>
+            {% else %}
+                <div class="qc-form-grid qc-form-grid-2">
+                    <div class="qc-field">
+                        <label class="qc-label">{{ 'After "Recompute all categories"'|trans }}</label>
+                        {{ fields.toggle('FACETS', filtry.wlaczone, 'Set the filters from the ranking'|trans) }}
+                        <div class="qc-hint">
+                            {{ 'Recomputing all categories then also updates the filter template. Recomputing one category does not: the button below does it.'|trans }}
+                        </div>
+                    </div>
+
+                    <div class="qc-field">
+                        <label class="qc-label" for="q-facets-template">{{ 'Filter template'|trans }}</label>
+                        <div class="qc-select-wrap">
+                            <select id="q-facets-template" name="FACETS_TEMPLATE" class="qc-field-base qc-select qc-focusable">
+                                <option value="0"{{ filtry.szablon == 0 ? ' selected' }}>{{ 'Choose a template'|trans }}</option>
+                                {% for szablon in filtry.szablony %}
+                                    <option value="{{ szablon.id }}"{{ filtry.szablon == szablon.id ? ' selected' }}>
+                                        {{ szablon.name }} ({{ '%count% categories'|trans({'%count%': szablon.categories}) }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            {{ icons.icon('chevronDown', 14, 'qc-select-chevron') }}
+                        </div>
+                        <div class="qc-hint">
+                            {{ 'The module replaces only the features in this template and sets it for all categories. Other filters (subcategories, brand, price, availability) stay as you set them, before the features.'|trans }}
+                        </div>
+                    </div>
+                </div>
+
+                {% if filtry.nieaktualne %}
+                    <div class="qc-alert qc-alert-warning" style="margin-block-start:16px">
+                        {{ icons.icon('info', 18, 'qc-alert-icon') }}
+                        <div>{{ 'The ranking changed after the filters were last updated. Update the filters to bring them in line.'|trans }}</div>
+                    </div>
+                {% endif %}
+
+                <label class="qc-label" style="margin-block-start:16px">
+                    {{ 'Filters from the ranking: %count% of %all% features in the shop'|trans({'%count%': filtry.cechy|length, '%all%': filtry.wszystkich}) }}
+                </label>
+
+                {% if filtry.cechy is empty %}
+                    <div class="qc-empty">
+                        <div class="qc-empty-icon">{{ icons.icon('box', 28) }}</div>
+                        <div class="qc-empty-text">{{ 'No ranking yet. Use "Recompute all categories".'|trans }}</div>
+                    </div>
+                {% else %}
+                    <div class="qc-table-wrap" style="max-block-size:420px;overflow-y:auto">
+                        <table class="qc-table">
+                            <thead>
+                                <tr>
+                                    <th class="qc-num">#</th>
+                                    <th>{{ 'Feature'|trans }}</th>
+                                    <th class="qc-num">{{ 'Categories'|trans }}</th>
+                                    <th class="qc-num">{{ 'Values'|trans }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cecha in filtry.cechy %}
+                                    <tr>
+                                        <td class="qc-num">{{ loop.index }}</td>
+                                        <td>{{ cecha.name }}</td>
+                                        <td class="qc-num">{{ cecha.categories }}</td>
+                                        <td class="qc-num">{{ cecha.values }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        {% if filtry.dostepny %}
+            <div class="qc-card-body" style="padding-top:0;display:flex;justify-content:flex-end;align-items:center;gap:16px;flex-wrap:wrap">
+                <span class="qc-card-desc">
+                    {% if filtry.kiedy %}
+                        {{ 'Filters last updated: %when%.'|trans({'%when%': filtry.kiedy}) }}
+                    {% else %}
+                        {{ 'The module has not set the filters yet.'|trans }}
+                    {% endif %}
+                </span>
+
+                {% if filtry.kopia %}
+                    <button type="submit" form="quince-frank-facets-restore" class="qc-btn qc-btn-outline"
+                            @click="if (!confirm('{{ 'Restore the filter template from before the last update (%when%)?'|trans({'%when%': filtry.kopia})|e('js') }}')) $event.preventDefault()">
+                        {{ icons.icon('refresh', 14) }} {{ 'Restore the previous template'|trans }}
+                    </button>
+                {% endif %}
+
+                {# Aktualizacja bierze szablon ZAPISANY, nie wybrany przed chwilą
+                   na liście: lista należy do formularza zapisu. #}
+                <button type="submit" form="quince-frank-facets-update" class="qc-btn qc-btn-primary"
+                        {{ filtry.szablon == 0 ? 'disabled' }}
+                        @click="if (brudny && !confirm('{{ 'You have changes that are not saved. The filters will use the saved settings. Continue?'|trans|e('js') }}')) $event.preventDefault()">
+                    {{ icons.icon('check', 14) }} {{ 'Update the filters'|trans }}
+                </button>
+            </div>
+        {% endif %}
     </div>
 
 <div class="qc-card">

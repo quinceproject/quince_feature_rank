@@ -28,3 +28,19 @@ quince_feature_rank_save:
     _legacy_controller: 'AdminQuinceFeatureRank'
     _legacy_link: 'AdminQuince'
 
+
+quince_feature_rank_facets_update:
+  path: quince/feature-rank/facets/update
+  methods: [POST]
+  defaults:
+    _controller: Quince\FeatureRank\Controller\Admin\SettingsController::facetsUpdateAction
+    _legacy_controller: 'AdminQuinceFeatureRank'
+    _legacy_link: 'AdminQuince'
+
+quince_feature_rank_facets_restore:
+  path: quince/feature-rank/facets/restore
+  methods: [POST]
+  defaults:
+    _controller: Quince\FeatureRank\Controller\Admin\SettingsController::facetsRestoreAction
+    _legacy_controller: 'AdminQuinceFeatureRank'
+    _legacy_link: 'AdminQuince'

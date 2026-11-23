@@ -38,6 +38,12 @@ in one category and say nothing in another.
   its own, on the next visit to one of its products (off by default, so an import
   does not trigger work for every product). "Recompute all categories" does it by
   hand.
+- **Filters on product lists.** The features from the ranking of all categories go
+  into one filter template of the Faceted search module (ps_facetedsearch), set for
+  every category of the shop. A category shows only the filters its products have.
+  Only the features in the template change: other filters stay as you set them. The
+  module keeps a copy of the template from before its last update, and one click
+  restores it.
 - **Multilingual.** English base with a full Polish translation, on PrestaShop's
   standard translation system.
 
@@ -108,6 +114,10 @@ Open **Quince project → Feature rank** in the back office menu, or click
    always show or to leave out, and save.
 4. Switch on **Recompute on its own** if the catalogue changes often and you want
    rankings to follow without recomputing by hand.
+5. For filters, choose an existing template of the Faceted search module under
+   **Filters on product lists**, switch on **Set the filters from the ranking** and
+   save, then click **Update the filters**. From then on "Recompute all categories"
+   updates the filters as well.
 
 ## Architecture
 

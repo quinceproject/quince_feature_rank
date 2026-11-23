@@ -15,6 +15,7 @@ if (!defined('_PS_VERSION_')) {
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+use Quince\FeatureRank\Facets\FacetTemplate;
 use Quince\FeatureRank\Rank\Calculator;
 use Quince\FeatureRank\Rank\Overrides;
 use Quince\FeatureRank\Rank\Provider;
@@ -42,7 +43,7 @@ class Quince_Feature_Rank extends Module
     {
         $this->name = 'quince_feature_rank';
         $this->tab = 'front_office_features';
-        $this->version = '0.1.4';
+        $this->version = '0.2.0';
         $this->author = 'Quince Project';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = ['min' => '9.0.0', 'max' => '9.99.99'];
@@ -264,14 +265,18 @@ class Quince_Feature_Rank extends Module
             INDEX `idx_odczyt` (`id_category`, `id_shop`, `position`)
         ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8mb4;';
 
-        return (bool) Db::getInstance()->execute($sql) && Overrides::installTable();
+        return (bool) Db::getInstance()->execute($sql) && Overrides::installTable() && FacetTemplate::installTable();
     }
 
+    /**
+     * Szablon filtrów zostaje w module filtrów taki, jaki moduł zapisał ostatnio:
+     * kasujemy tylko własne tabele, w tym kopię do przywracania.
+     */
     private function uninstallDb(): bool
     {
         return (bool) Db::getInstance()->execute(
             'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . Storage::TABELA . '`'
-        ) && Overrides::uninstallTable();
+        ) && Overrides::uninstallTable() && FacetTemplate::uninstallTable();
     }
 
     /**

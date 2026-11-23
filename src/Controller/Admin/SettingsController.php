@@ -19,6 +19,7 @@ use Db;
 use Module;
 use PrestaShopBundle\Security\Attribute\AdminSecurity;
 use Quince\Engine\Controller\Admin\QuinceController;
+use Quince\FeatureRank\Facets\FacetTemplate;
 use Quince\FeatureRank\Rank\Calculator;
 use Quince\FeatureRank\Rank\Overrides;
 use Quince\FeatureRank\Rank\Podglad;
@@ -54,6 +55,7 @@ class SettingsController extends QuinceController
 
         $kategorie = $this->kategorie($idLang, $idShop);
         $wybrana = $this->wybrana($request, $kategorie);
+        $podsumowanie = $this->podsumowanie($kategorie, $idShop);
 
         return $this->renderPanel(
             '@Modules/quince_feature_rank/views/templates/admin/settings.html.twig',
@@ -63,7 +65,8 @@ class SettingsController extends QuinceController
                 'podglad' => $wybrana === null
                     ? ['produktow' => 0, 'cechy' => []]
                     : (new Podglad())->dlaKategorii($wybrana['id'], $idShop, $idLang),
-                'podsumowanie' => $this->podsumowanie($kategorie, $idShop),
+                'podsumowanie' => $podsumowanie,
+                'filtry' => $this->filtry($idShop, $idLang, $podsumowanie['kiedy']),
                 'progi' => $this->ustawienia->all(),
                 'pokrycie' => $this->ustawienia->procent(),
                 'layoutTitle' => 'Feature ranking',
@@ -99,9 +102,9 @@ class SettingsController extends QuinceController
         $idShop = (int) $this->getContext()->shop->id;
         $idCategory = (int) $request->request->get('id_category');
 
-        $przedZmiana = $this->ustawienia->all();
+        $przedZmiana = $this->ustawienia->warunki();
         $this->ustawienia->save($request->request->all());
-        $warunkiZmienione = $this->ustawienia->all() !== $przedZmiana;
+        $warunkiZmienione = $this->ustawienia->warunki() !== $przedZmiana;
 
         $this->zapiszDecyzje($request, $idShop);
         $wszedzieZmienione = $this->zapiszWszedzie($request, $idShop);
@@ -117,6 +120,7 @@ class SettingsController extends QuinceController
                 self::DOMENA,
                 ['%count%' => $ile]
             ));
+            $this->filtryPoPrzeliczeniu($idShop);
         } else {
             if ($idCategory > 0) {
                 $modul->przeliczKategorie($idCategory, $idShop);
@@ -206,16 +210,125 @@ class SettingsController extends QuinceController
             return $this->redirectToRoute('quince_feature_rank_settings');
         }
 
+        $idShop = (int) $this->getContext()->shop->id;
         $modul = Module::getInstanceByName('quince_feature_rank');
-        $ile = $modul->przeliczSklep((int) $this->getContext()->shop->id);
+        $ile = $modul->przeliczSklep($idShop);
 
         $this->addFlash('success', $this->trans(
             'Ranking recomputed for %count% categories.',
             self::DOMENA,
             ['%count%' => $ile]
         ));
+        $this->filtryPoPrzeliczeniu($idShop);
 
         return $this->redirectToRoute('quince_feature_rank_settings');
+    }
+
+    /**
+     * Cechy z rankingu do wskazanego szablonu filtrów, bez przeliczania
+     * rankingu: np. po zmianie pominięć albo po leniwym przeliczeniu kategorii,
+     * które samo filtrów nie rusza.
+     */
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", message: 'You do not have permission to change this.')]
+    public function facetsUpdateAction(Request $request): RedirectResponse
+    {
+        if (!$this->isCsrfTokenValid('quince_feature_rank_facets_update', $request->request->get('_csrf_token'))) {
+            $this->addFlash('error', $this->trans('Invalid security token, please try again.', self::DOMENA));
+
+            return $this->redirectToRoute('quince_feature_rank_settings');
+        }
+
+        $filtry = new FacetTemplate();
+        $idSzablonu = $this->ustawienia->szablonFiltrow();
+
+        if (!$filtry->dostepny() || !$filtry->istnieje($idSzablonu)) {
+            $this->addFlash('error', $this->trans('Choose the filter template first and save.', self::DOMENA));
+
+            return $this->redirectToRoute('quince_feature_rank_settings');
+        }
+
+        $this->zapiszFiltry($filtry, $idSzablonu, (int) $this->getContext()->shop->id);
+
+        return $this->redirectToRoute('quince_feature_rank_settings');
+    }
+
+    /** Szablon filtrów sprzed ostatniego zapisu modułu, znak w znak. */
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", message: 'You do not have permission to change this.')]
+    public function facetsRestoreAction(Request $request): RedirectResponse
+    {
+        if (!$this->isCsrfTokenValid('quince_feature_rank_facets_restore', $request->request->get('_csrf_token'))) {
+            $this->addFlash('error', $this->trans('Invalid security token, please try again.', self::DOMENA));
+
+            return $this->redirectToRoute('quince_feature_rank_settings');
+        }
+
+        $filtry = new FacetTemplate();
+
+        if ($filtry->dostepny() && $filtry->przywroc($this->ustawienia->szablonFiltrow())) {
+            $this->addFlash('success', $this->trans('The previous filter template is back.', self::DOMENA));
+        } else {
+            $this->addFlash('error', $this->trans('There is no previous version of the filter template to restore.', self::DOMENA));
+        }
+
+        return $this->redirectToRoute('quince_feature_rank_settings');
+    }
+
+    /**
+     * Po przeliczeniu wszystkich kategorii: filtry z nowego rankingu, jeśli
+     * sklep tak ustawił i wskazał istniejący szablon. Przeliczenie jednej
+     * kategorii filtrów nie rusza, bo przebudowa przypisań obejmuje cały sklep.
+     */
+    private function filtryPoPrzeliczeniu(int $idShop): void
+    {
+        $filtry = new FacetTemplate();
+        $idSzablonu = $this->ustawienia->szablonFiltrow();
+
+        if ($this->ustawienia->filtryWlaczone() && $filtry->dostepny() && $filtry->istnieje($idSzablonu)) {
+            $this->zapiszFiltry($filtry, $idSzablonu, $idShop);
+        }
+    }
+
+    private function zapiszFiltry(FacetTemplate $filtry, int $idSzablonu, int $idShop): void
+    {
+        $ile = $filtry->zapisz($idSzablonu, $idShop, (int) $this->getContext()->language->id);
+        $this->ustawienia->zapamietajFiltry();
+
+        $this->addFlash('success', $this->trans(
+            'Filters updated: %count% features in the filter template.',
+            self::DOMENA,
+            ['%count%' => $ile]
+        ));
+    }
+
+    /**
+     * Dane sekcji „Filtry na listingu”.
+     *
+     * @return array<string,mixed>
+     */
+    private function filtry(int $idShop, int $idLang, ?string $rankingKiedy): array
+    {
+        $filtry = new FacetTemplate();
+
+        if (!$filtry->dostepny()) {
+            return ['dostepny' => false];
+        }
+
+        $idSzablonu = $this->ustawienia->szablonFiltrow();
+        $kiedy = $this->ustawienia->filtryKiedy();
+
+        return [
+            'dostepny' => true,
+            'wlaczone' => $this->ustawienia->filtryWlaczone(),
+            'szablony' => $filtry->szablony(),
+            'szablon' => $filtry->istnieje($idSzablonu) ? $idSzablonu : 0,
+            'cechy' => $filtry->cechy($idShop, $idLang),
+            'wszystkich' => $filtry->wszystkichCech($idShop),
+            'kiedy' => $kiedy,
+            // Ranking nowszy od filtrów: przeliczona kategoria (także leniwie,
+            // przy wizycie klienta) zmieniła listę cech, a szablon jest sprzed tego.
+            'nieaktualne' => $kiedy !== null && $rankingKiedy !== null && $rankingKiedy > $kiedy,
+            'kopia' => $filtry->istnieje($idSzablonu) ? $filtry->kopiaZDnia($idSzablonu) : null,
+        ];
     }
 
     /**

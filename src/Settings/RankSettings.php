@@ -45,7 +45,16 @@ final class RankSettings
         // Domyślnie nie: sklep, który dopiero wgrywa towar, dostawałby przy każdym
         // imporcie tyle unieważnień, ile produktów.
         'AUTO' => '0',
+
+        // Filtry na listingu: czy przeliczenie wszystkich kategorii ustawia też
+        // cechy w szablonie modułu filtrów, i w którym szablonie. Bez wskazanego
+        // szablonu moduł niczego w filtrach nie zapisuje.
+        'FACETS' => '0',
+        'FACETS_TEMPLATE' => '0',
     ];
+
+    /** Kiedy moduł ostatnio zapisał cechy w szablonie filtrów. */
+    private const FILTRY_KIEDY = 'QUINCE_FRANK_FACETS_UPDATED';
 
     /** Kategorie czekające na przeliczenie: lista identyfikatorów po przecinku. */
     private const BRUDNE = 'QUINCE_FRANK_DIRTY';
@@ -61,6 +70,17 @@ final class RankSettings
         }
 
         return $out;
+    }
+
+    /**
+     * Same warunki rankingu, bez ustawień filtrów: ich zmiana wymaga
+     * przeliczenia całego sklepu, a przełączenie filtrów nie.
+     *
+     * @return array<string,string>
+     */
+    public function warunki(): array
+    {
+        return array_diff_key($this->all(), ['FACETS' => true, 'FACETS_TEMPLATE' => true]);
     }
 
     /** Próg wypełnienia jako ułamek, w takiej postaci liczy go kalkulator. */
@@ -83,6 +103,28 @@ final class RankSettings
     public function samoczynnie(): bool
     {
         return $this->all()['AUTO'] === '1';
+    }
+
+    public function filtryWlaczone(): bool
+    {
+        return $this->all()['FACETS'] === '1';
+    }
+
+    public function szablonFiltrow(): int
+    {
+        return (int) $this->all()['FACETS_TEMPLATE'];
+    }
+
+    public function filtryKiedy(): ?string
+    {
+        $wartosc = (string) Configuration::get(self::FILTRY_KIEDY);
+
+        return $wartosc === '' ? null : $wartosc;
+    }
+
+    public function zapamietajFiltry(): void
+    {
+        ConfigStore::set(self::FILTRY_KIEDY, date('Y-m-d H:i:s'));
     }
 
     /**
@@ -145,6 +187,14 @@ final class RankSettings
 
         if (array_key_exists('AUTO', $values)) {
             ConfigStore::set(self::PREFIX . 'AUTO', $values['AUTO'] === '1' ? '1' : '0');
+        }
+
+        if (array_key_exists('FACETS', $values)) {
+            ConfigStore::set(self::PREFIX . 'FACETS', $values['FACETS'] === '1' ? '1' : '0');
+        }
+
+        if (array_key_exists('FACETS_TEMPLATE', $values)) {
+            ConfigStore::set(self::PREFIX . 'FACETS_TEMPLATE', (string) max(0, (int) $values['FACETS_TEMPLATE']));
         }
     }
 }
